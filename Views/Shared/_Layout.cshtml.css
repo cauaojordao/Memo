@@ -1,0 +1,63 @@
+﻿.layout__container {
+    display: flex;
+    gap: 48px;
+    margin: 3.5svh 12svw;
+}
+
+
+.nav__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0px 25px;
+
+    height: 10svh;
+    width: 100svw;
+
+    border: 1px solid var(--cor3);
+
+    background-color: var(--cor1);
+}
+
+.nav__container p{
+    margin: 0;
+}
+
+.nav__container p a{
+    text-decoration: underline; 
+}
+
+
+.nav__container p a:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.main__container {
+    height: 65vh;
+    width: 76vw;
+
+    margin: 36px 12vw;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 10px;
+
+    height: 10vh;
+    width: 330px;
+
+    border: 1px solid var(--cor3);
+
+    background-color: var(--cor1);
+}
+
+.binary {
+    width: 300px;
+    height: 66px;
+    font-size: 14px;
+}

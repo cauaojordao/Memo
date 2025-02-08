@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+body {
+    background-color: var(--cor2);
+    margin: 0;
+    box-sizing: border-box;
+    font-family: var(--body-font);
+    color: var(--cor3);
+}
+
+a{
+    color: unset;
+}
+
+p, h1{
+    margin: 0;
+}
+
+h1{
+    font-family: var(--title-font);
+}
+
+:root {
+    --title-font: "Black Ops One";
+    --body-font: "Roboto Mono";
+
+    --cor1: #1C947A;
+    --cor2: #DCE799;
+    --cor3: #1E1E1E;
+}

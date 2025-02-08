@@ -1,0 +1,22 @@
+﻿@model Memo.Models.Playlist
+
+@{
+	ViewData["Title"] = "Delete Playlist";
+}
+
+
+<div class="page__container">
+	<div class="form__container">
+
+		<h1 class="title">
+			Are you really sure?
+		</h1>
+		<p>Deleting a playlist is a irreversible action</p>
+		<div class="controllers">
+			<a asp-route-id="@Model.Id" asp-action="Details">return</a>
+			<form asp-action="Delete">
+				<input type="submit" value="done" class="send">
+			</form>
+		</div>
+	</div>
+</div>

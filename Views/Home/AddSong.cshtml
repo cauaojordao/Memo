@@ -1,0 +1,236 @@
+﻿@model Memo.Models.PlaylistViewModel
+
+@{
+	ViewData["Title"] = Model.Playlist.Name;
+}
+
+<div class="page__container">
+
+	<div class="playlist__container">
+		<div class="header__container">
+			<img fill src="@Model.Playlist.ImageUrl" />
+		</div>
+		<div class="title__container">
+			<h1>
+				@Model.Playlist.Name
+			</h1>
+		</div>
+		<div class="details__container">
+			<div class="info">
+
+				<p>
+					created at: @Model.Playlist.CreatedDate.ToShortDateString()
+				</p>
+				@if (Model.Playlist.Musics?.Count() > 0)
+				{
+					<p>
+						@Model.Playlist.Musics.Count() musics
+					</p>
+				}
+				else if (Model.Playlist.Musics?.Count() == 1)
+				{
+					<p>
+						1 music.
+					</p>
+				}
+				else
+				{
+					<p>
+						no musics.
+					</p>
+				}
+			</div>
+			<div class="controls">
+				<a asp-action="Edit" asp-route-id="@Model.Playlist.Id">edit</a>
+				|
+				<a asp-action="Delete" asp-route-id="@Model.Playlist.Id">delete</a>
+			</div>
+		</div>
+		<div class="music__box__container">
+			<div class="music__box">
+				<a asp-route-id="@Model.Playlist.Id" asp-action="AddSong" style="
+					display: flex;
+					align-items: center;
+					text-align:left;
+					width: 100%;
+					height: 10%;
+					padding: 0 18px;
+					gap: 36px;
+					background: none;
+					border: none;
+					text-decoration: none;
+					border-bottom: 1px solid var(--cor3);">
+
+					<p>
+						+
+					</p>
+					<span>
+						Add Song
+					</span>
+				</a>
+				@if (Model.Playlist.Musics != null)
+				{
+					@foreach (var song in Model.Playlist.Musics.Select((song, index) => new { song, index }))
+					{
+						<div class="song__card">
+							<div class="song__card__details">
+								<span>
+									@(song.index + 1)
+								</span>
+
+								<p>
+									@song.song.Name - @song.song.Author
+								</p>
+							</div>
+
+							<a asp-route-id="@song.song.Id" asp-action="SeeSong">
+								details
+							</a>
+						</div>
+					}
+				}
+			</div>
+			<div id="actions" class="actions__container">
+				<div class="form">
+					<form asp-action="AddSong">
+						<div class="form__group">
+							<label asp-for="@Model.Music.Name" class="form__label">
+
+							</label>
+							<input asp-for="@Model.Music.Name" style="height: 33px; border: 1px solid var(--cor3);" />
+						</div>
+						<div class="form__group">
+							<label asp-for="@Model.Music.Author" class="form__label">
+
+							</label>
+							<input asp-for="@Model.Music.Author" style="height: 33px; border: 1px solid var(--cor3);" />
+						</div>
+						<div class="form__group">
+							<label asp-for="@Model.Music.Link" class="form__label">
+
+							</label>
+							<input asp-for="@Model.Music.Link" style="height: 33px; border: 1px solid var(--cor3);" />
+						</div>
+						<div class="form__group">
+							<label hidden asp-for="@Model.Music.PlaylistId" class="form__label">
+
+							</label>
+							<input hidden value="@Model.Playlist.Id" asp-for="@Model.Music.PlaylistId" style="height: 33px; border: 1px solid var(--cor3);" />
+						</div>
+						<div class="form__group">
+							<label hidden asp-for="@Model.Music.Playlist" class="form__label">
+
+							</label>
+							<input hidden value="@Model.Playlist" asp-for="@Model.Music.PlaylistId" style="height: 33px; border: 1px solid var(--cor3);" />
+						</div>
+						<div class="controllers">
+							<a asp-route-id="@Model.Playlist.Id" asp-action="Details">return</a>
+							<input type="submit" value="done" class="send">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="playlist__list__container">
+		@foreach (var playlist in Model.Playlists)
+		{
+			if (playlist.Id != Model.Playlist.Id)
+			{
+				<div class="playlist__card">
+					<div class="playlist__card__upper">
+						<h1>@playlist.Name</h1>
+
+						<div class="playlist__card__display">
+							<img src="@playlist.ImageUrl" alt="no playlists" />
+						</div>
+
+					</div>
+					<div class="playlist__card__details">
+						@if (playlist.Musics.Count() > 1)
+						{
+							<i onclick="toggleSongs(@playlist.Id)" id="chevron-@playlist.Id" class="count bi bi-chevron-right"></i>
+							<p id="count-@playlist.Id">
+								@playlist.Musics.Count() musics
+							</p>
+
+							<div id="playlist-@playlist.Id" class="song-list hidden">
+
+								@foreach (var music in playlist.Musics.Take(5).Select((music, index) => new { music, index }))
+								{
+									if (music.index == 4)
+									{
+										<p>...</p>
+									}
+									else
+									{
+										<p class="song__list__item">
+											@music.music.Name - @music.music.Author
+										</p>
+
+									}
+								}
+							</div>
+						}
+						else if (playlist.Musics.Count() == 1)
+						{
+							<i onclick="toggleSongs(@playlist.Id)" class="count bi bi-chevron-right"></i>
+							<p id="count-@playlist.Id">
+								1 music.
+							</p>
+
+							<div id="playlist-@playlist.Id" class="song-list hidden">
+
+								@foreach (var music in playlist.Musics.Take(5).Select((music, index) => new { music, index }))
+								{
+									if (music.index == 4)
+									{
+										<p>...</p>
+									}
+									else
+									{
+										<p class="song__list__item">
+											@music.music.Name - @music.music.Author
+										</p>
+
+									}
+								}
+							</div>
+						}
+						else
+						{
+
+							<p>
+								<i class="bi bi-chevron-right"></i>
+								no musics yet.
+							</p>
+						}
+					</div>
+					<div class="details__link">
+						<p>
+							created at: @playlist.CreatedDate.ToShortDateString()
+						</p>
+						<a asp-action="Details" asp-route-id="@playlist.Id">details</a>
+					</div>
+				</div>
+			}
+		}
+	</div>
+</div>
+
+<script>
+		function toggleSongs(playlistId) {
+		let songList = document.getElementById("playlist-" + playlistId);
+		let chevron = document.getElementById("chevron-" + playlistId);
+		let count = document.getElementById("count-" + playlistId);
+
+		let isHidden = songList.classList.contains("hidden");
+
+		songList.classList.toggle("hidden");
+		count.classList.toggle("hidden");
+
+		chevron.classList.toggle("bi-chevron-right", !isHidden);
+		chevron.classList.toggle("bi-chevron-down", isHidden);
+	}
+</script>
+

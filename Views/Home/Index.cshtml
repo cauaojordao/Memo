@@ -1,0 +1,118 @@
+﻿@model List<Playlist>
+
+@{
+	ViewData["Title"] = "Memo";
+}
+
+<div class="page__container">
+	@if (Model.Count() > 0)
+	{
+		<div class="playlists__container">
+			@foreach (var playlist in Model)
+			{
+				<div class="playlist__card">
+					<div class="playlist__card__upper">
+						<h1>@playlist.Name</h1>
+
+						<div class="playlist__card__display">
+							<img src="@playlist.ImageUrl" alt="no playlists" />
+						</div>
+
+					</div>
+					<div class="playlist__card__details">
+						@if (playlist.Musics.Count() > 1)
+						{
+							<i onclick="toggleSongs(@playlist.Id)" id="chevron-@playlist.Id" class="count bi bi-chevron-right"></i>
+							<p id="count-@playlist.Id" >
+								@playlist.Musics.Count() musics
+							</p>
+
+							<div id="playlist-@playlist.Id" class="song-list hidden">
+
+								@foreach (var music in playlist.Musics.Take(5).Select((music, index) => new { music, index }))
+								{
+									if (music.index == 4)
+									{
+										<p>...</p>
+									}
+									else
+									{
+										<p class="song__list__item">
+											@music.music.Name - @music.music.Author
+										</p>
+
+									}
+								}
+							</div>
+						}
+						else if (playlist.Musics.Count() == 1)
+						{
+							<i onclick="toggleSongs(@playlist.Id)" class="count bi bi-chevron-right"></i>
+							<p id="count-@playlist.Id">
+								1 music.
+							</p>
+
+							<div id="playlist-@playlist.Id" class="song-list hidden">
+
+								@foreach (var music in playlist.Musics.Take(5).Select((music, index) => new { music, index }))
+								{
+									if (music.index == 4)
+									{
+										<p>...</p>
+									}
+									else
+									{
+										<p class="song__list__item">
+											@music.music.Name - @music.music.Author
+										</p>
+
+									}
+								}
+							</div>
+						}
+						else
+						{
+
+							<p>
+								<i class="bi bi-chevron-right"></i>
+								no musics yet.
+							</p>
+						}
+					</div>
+					<div class="details__link">
+						<p>
+							created at: @playlist.CreatedDate.ToShortDateString()
+						</p>
+						<a asp-action="Details" asp-route-id="@playlist.Id">details</a>
+					</div>
+				</div>
+			}
+		</div>
+	}
+	else
+	{
+		<div class="centered__container">
+			<div class="exception__container">
+
+				<img src="~/Images/noplaylists.png" alt="no playlists" />
+				<a style="color: var(--cor3);" asp-action="Create">start creating</a>
+			</div>
+		</div>
+	}
+</div>
+
+<script>
+		function toggleSongs(playlistId) {
+		let songList = document.getElementById("playlist-" + playlistId);
+		let chevron = document.getElementById("chevron-" + playlistId);
+		let count = document.getElementById("count-" + playlistId);
+
+		let isHidden = songList.classList.contains("hidden");
+
+		songList.classList.toggle("hidden");
+		count.classList.toggle("hidden");
+
+		chevron.classList.toggle("bi-chevron-right", !isHidden);
+		chevron.classList.toggle("bi-chevron-down", isHidden);
+	}
+</script>
